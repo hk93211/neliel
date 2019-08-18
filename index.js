@@ -157,6 +157,47 @@ var neliel = {
     }
     return nodes;
   },
+  /**
+   * This method is like `_.uniq` except that it accepts `iteratee` which is
+   * invoked for each element in `array` to generate the criterion by which
+   * uniqueness is computed. The order of result values is determined by the
+   * order they occur in the array. The iteratee is invoked with one argument:
+   * (value).
+   * 
+   * @param {Array} array The array to inspect.
+   * @param {String} key The object key to remove duplicate data
+   * @example
+   * 
+   * neliel.uniqBy([1, 2, 3, 2, 1]);
+   * // => [1, 2, 3]
+   * 
+   * neliel.uniqBy([{ 'x': 1 }, { 'x': 2 }, { 'x': 1 }], 'x');
+   * // => [{ 'x': 1 }, { 'x': 2 }]
+   */
+  uniqBy: function(array, key) {
+    if (!neliel.isArray(array)) {
+      console.error('please pass in Array.');
+      return array;
+    }
+    var arr = [];
+    var obj = {};
+    array.forEach(function(item, index) {
+      var attr = key ? item[key] : item;
+      if (!obj[attr]) {
+        obj[attr] = index + 1;
+        arr.push(item);
+      }
+    });
+    return arr;
+  },
+  /**
+   * judge object is Array or not
+   * 
+   * @param {Object} object to judge
+   */
+  isArray(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+  },
 }
 
 module.exports = neliel
