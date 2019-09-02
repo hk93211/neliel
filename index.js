@@ -190,6 +190,10 @@ var neliel = {
     });
     return arr;
   },
+
+
+  /****************************************  util  ****************************************/
+
   /**
    * judge object is Array or not
    * 
@@ -197,6 +201,156 @@ var neliel = {
    */
   isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
+  },
+
+  /**
+   * judge value is like zero or not
+   * 
+   * @param {*} value 
+   * @example
+   * 
+   * neliel.zeroLike('0.000');
+   * // => true
+   * 
+   * neliel.zeroLike(01);
+   * // => false
+   */
+  zeroLike(value) {
+    return /^0(.0+)?$/.test(String(value));
+  },
+
+  /**
+   * fills (modifies) all the elements of an array from a start index
+   * (default zero) to an end index (default array length) with a static
+   * value. It returns the modified array.
+   * 
+   * @param {Array} array The array to fill
+   * @param {Any} value The value to fill the array
+   * @param {Number} start start index, default 0
+   * @param {Number} end end index, default array.length
+   * @example
+   * 
+   * neliel.fill([1, 2, 5], 3);
+   * // => [3, 3, 3]
+   * 
+   * neliel.fill([1, 2, 5], 3, 1);
+   * // => [1, 3, 3]
+   * 
+   * neliel.fill([1, 2, 5], 3, -1);
+   * // => [1, 2, 3]
+   */
+  fill(array, value, start, end) {
+    if (value == null) {
+      throw new TypeError('this is null or not defined');
+    } 
+    
+    var O = Object(array);
+
+    var len = O.length >>> 0;
+    
+    var relativeStart = start >> 0;
+
+    var k = relativeStart < 0 ?
+      Math.max(len + start, 0) :
+      Math.min(relativeStart, len);
+
+    var relativeEnd = end === undefined ? len : end >> 0;
+
+    var final = relativeEnd < 0 ?
+      Math.max(len + relativeEnd, 0) :
+      Math.min(relativeEnd, len);
+
+    while (k < final) {
+      O[k] = value;
+      k++;
+    }
+
+    return O;
+  },
+
+  /**
+   * 
+   * 
+   * @param {String || Number} value The value to convert to thousands
+   * @param {Number} len The length of decimals to keep
+   */
+  thousandsFormatter(value, len) {
+    var reg = /\d{1,3}(?=(\d{3})+$)/g;
+    var integer = String(value).split('.')[0];
+    var decimal = String(value).split('.')[1];
+    var integer4return = integer.replace(reg, '$&,');
+    var decimal4retrun;
+    
+    if (value == undefined || isNaN(value)) {
+      return '0';
+    }
+    if (len == undefined || isNaN(len) || len <= 0) {
+      return integer4return;
+    }
+    
+    var zeroString = neliel.fill(new Array(Math.floor(len)), 0).join('');
+    if (neliel.zeroLike(value)) {
+      return '0.' + zeroString;
+    }
+
+    if (decimal != undefined) {
+      var len4decimal = decimal.length;
+      if (len4decimal >= len) {
+        decimal4retrun = decimal.substring(0, len);
+      } else {
+        var defaultArray = decimal.split();
+        var remainArray = neliel.fill(new Array(len - len4decimal), 0);
+        decimal4retrun = defaultArray.concat(remainArray).join('');
+      }
+      
+    } else {
+      decimal4retrun = '';
+    }
+    
+    return integer4return + '.' + decimal4retrun;
+  },
+
+  /**
+   * This method is like `_.clone` except that it recursively clones `value`.
+   * 
+   * @param {Array || Object} value The value to recursively clone
+   */
+  cloneDeep(value) {
+    if (value === null) return null;
+    if (typeof value !== 'object') return value;
+    if (value.constructor === Date) return new Date(value);
+    if (value.constructor === RegExp) return new RegExp(value);
+    var result = neliel.isArray(value) ? [] : {};
+    for (var key in value) {
+      if (value.hasOwnProperty(key)) {
+        if (typeof value[key] === 'object' && value[key] !== null) {
+          result[key] = neliel.cloneDeep(value[key]);
+        } else {
+          result[key] = value[key];
+        }
+      }
+    }
+    return result;
+  },
+
+  
+  /****************************************  string  ****************************************/
+  
+  /**
+   * get the value from url 's query parameter
+   * 
+   * @param {*} target The key of url 's query parameter
+   */
+  getUrlQueryParam(target) {
+    var queryString = window.location.search.substring(1)
+    var arr = queryString.split('&')
+    for (var i = 0; i < arr.length; i++) {
+      var pair = arr[i].split('=')
+      if (pair[0] == target) {
+        return pair[1]
+      }
+    }
+    return false
   },
 }
 
