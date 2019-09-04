@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/hk93211/neliel/compare/v1.0.3...v1.0.4) (2019-09-04)
+
+
+### Features
+
+* add window feature open windowOC ([c3d576d](https://github.com/hk93211/neliel/commit/c3d576d))
+
+
+
 ## [1.0.3](https://github.com/hk93211/neliel/compare/v1.0.2...v1.0.3) (2019-09-02)
 
 
