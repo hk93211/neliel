@@ -352,6 +352,33 @@ var neliel = {
     }
     return false
   },
+
+
+  /****************************************  window  ****************************************/
+
+  /**
+   * 
+   * @param {String} url The url for a tag to open
+   * @param {String} targetType The type of open new window
+   * @param {String} id Id for a tag
+   * @param {String} download 
+   */
+  openWindow(url, targetType, id, download) {
+    if (!url) return;
+    // remove when it exist
+    if (document.getElementById(id)) {
+      document.body.removeChild(document.getElementById(id))
+    }
+    var a = document.createElement('a')
+    a.setAttribute('href', url)
+    if (download) {
+      a.setAttribute('download', url)
+    }
+    a.setAttribute('target', targetType || '_blank')
+    a.setAttribute('id', id || 'open')
+    document.body.appendChild(a)
+    a.click()
+  },
 }
 
 module.exports = neliel
