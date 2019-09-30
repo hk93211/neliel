@@ -199,7 +199,7 @@ var neliel = {
    * 
    * @param {Object} object to judge
    */
-  isArray(obj) {
+  isArray: function(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
   },
 
@@ -215,7 +215,7 @@ var neliel = {
    * neliel.zeroLike(01);
    * // => false
    */
-  zeroLike(value) {
+  zeroLike: function(value) {
     return /^0(.0+)?$/.test(String(value));
   },
 
@@ -239,7 +239,7 @@ var neliel = {
    * neliel.fill([1, 2, 5], 3, -1);
    * // => [1, 2, 3]
    */
-  fill(array, value, start, end) {
+  fill: function(array, value, start, end) {
     if (value == null) {
       throw new TypeError('this is null or not defined');
     } 
@@ -274,7 +274,7 @@ var neliel = {
    * @param {String || Number} value The value to convert to thousands
    * @param {Number} len The length of decimals to keep
    */
-  thousandsFormatter(value, len) {
+  thousandsFormatter: function(value, len) {
     var reg = /\d{1,3}(?=(\d{3})+$)/g;
     var integer = String(value).split('.')[0];
     var decimal = String(value).split('.')[1];
@@ -315,7 +315,7 @@ var neliel = {
    * 
    * @param {Array || Object} value The value to recursively clone
    */
-  cloneDeep(value) {
+  cloneDeep: function(value) {
     if (value === null) return null;
     if (typeof value !== 'object') return value;
     if (value.constructor === Date) return new Date(value);
@@ -333,6 +333,29 @@ var neliel = {
     return result;
   },
 
+  /**
+   * generate a throttle function
+   * 
+   * @param {Function} fn The callback
+   * @param {Number} delay time interval
+   */
+  throttle: function(fn, delay) {
+    var last = 0, timer = null
+    return function () {
+      var context = this
+      var args = arguments
+      var now = +new Date()
+      if (now - last < delay) {
+        clearTimeout(timer)
+        timer = setTimeout(function() {
+          last = now
+        }, delay)
+      } else {
+        last = now
+        fn.apply(context, args)
+      }
+    }
+  },
   
   /****************************************  string  ****************************************/
   
@@ -341,7 +364,7 @@ var neliel = {
    * 
    * @param {*} target The key of url 's query parameter
    */
-  getUrlQueryParam(target) {
+  getUrlQueryParam: function(target) {
     var queryString = window.location.search.substring(1)
     var arr = queryString.split('&')
     for (var i = 0; i < arr.length; i++) {
@@ -363,7 +386,7 @@ var neliel = {
    * @param {String} id Id for a tag
    * @param {String} download 
    */
-  openWindow(url, targetType, id, download) {
+  openWindow: function(url, targetType, id, download) {
     if (!url) return;
     // remove when it exist
     if (document.getElementById(id)) {
