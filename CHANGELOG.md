@@ -1,3 +1,14 @@
+## [1.0.6](https://github.com/hk93211/neliel/compare/v1.0.3...v1.0.6) (2019-10-05)
+
+
+### Features
+
+* add window feature open windowOC ([c3d576d](https://github.com/hk93211/neliel/commit/c3d576d))
+* some util feature ([d109ae0](https://github.com/hk93211/neliel/commit/d109ae0))
+* util method throttle ([81cc465](https://github.com/hk93211/neliel/commit/81cc465))
+
+
+
 ## [1.0.5](https://github.com/hk93211/neliel/compare/v1.0.3...v1.0.5) (2019-09-30)
 
 
