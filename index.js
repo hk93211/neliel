@@ -371,7 +371,6 @@ var neliel = {
       O[k] = value;
       k++;
     }
-
     return O;
   },
 
