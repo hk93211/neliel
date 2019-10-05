@@ -195,12 +195,119 @@ var neliel = {
   /****************************************  util  ****************************************/
 
   /**
-   * judge object is Array or not
+   * judge value is static or not
    * 
-   * @param {Object} object to judge
+   * @param {*} value The value to be judge
+   * 
+   * @example
+   * neliel.isStatic('0.000');
+   * // => true
+   * 
+   * neliel.isStatic(null);
+   * // => false
    */
-  isArray: function(obj) {
-    return Object.prototype.toString.call(obj) === '[object Array]';
+  isStatic: function(value) {
+    var type = typeof value;
+    return type === 'string' || type === 'number' || type === 'boolean' || type === 'undefined' || value === null;
+  },
+
+  /**
+   * judge value is static or not
+   * 
+   * @param {*} value The value to be judge
+   */
+  isPrimitive: function(value) {
+    return neliel.isStatic(value) || typeof value === 'symbol';
+  },
+
+  /**
+   * judge value is object type
+   * 
+   * @param {*} value The value to be judge 
+   */
+  isObject: function(value) {
+    let type = typeof value;
+    return value != null && (type == 'object' || type == 'function');
+  },
+
+  /**
+   * judge value is function type
+   * 
+   * @param {*} value The value to be judge
+   */
+  isPlainObject: function(obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]'
+  },
+
+  isArray: function(value) {
+    return Object.prototype.toString.call(value) === '[object Array]';
+  },
+
+  isArrayLike: function(value) {
+    return value != null && neliel.isLength(value.length) && !neliel.isFunction(value);
+  },
+
+  isRegExp: function(value) {
+    return Object.prototype.toString.call(value) === '[object RegExp]'
+  },
+
+  isDate: function(value) {
+    return Object.prototype.toString.call(value) === '[object Date]'
+  },
+
+  isFunction: function(value) {
+    return Object.prototype.toString.call(value) === '[object Function]'
+  },
+
+  /**
+   * judge value type
+   * 
+   * @param {*} value The value to be judge
+   * @example
+   * 
+   * neliel.getRawType([]);
+   * // => Array
+   */
+  getRawType: function(value) {
+    return Object.prototype.toString.call(value).slice(8, -1)
+  },
+
+  /**
+   * judge value is effective length of array
+   * 
+   * @param {*} value The value to be judge
+   */
+  isLength: function(value) {
+    return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= Number.MAX_SAFE_INTEGER;
+  },
+
+  /**
+   * judge value is empty or not
+   * 
+   * @param {*} value The value to be judge
+   * @example
+   * 
+   * neliel.isEmpty({});
+   * // => true
+   * 
+   * neliel.isEmpty([]);
+   * // => true
+   */
+  isEmpty: function(value) {
+    if (value == null) {
+      return true;
+    }
+    if (neliel.isArrayLike(value)) {
+      return !value.length;
+    } else if(neliel.isPlainObject(value)){
+      for (let key in value) {
+        if (hasOwnProperty.call(value, key)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   },
 
   /**
